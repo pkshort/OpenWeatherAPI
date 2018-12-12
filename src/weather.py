@@ -35,11 +35,16 @@ with open('locations.csv') as csv_file:
     with open(output_csv, mode = "w") as output_file:
         output_writer = csv.writer(output_file, delimiter=',')
         output_writer.writerow(output_header)
+
+        # looping through input file
+        # DictReader is a dictionary within a dictionary, therefore
+        # a nested loop is necessary
         for row in csv_reader:
             for key, value in row.items():
 
                     # can call API 60 times per second
                     # sleep ensures that the API is called under 60 times
+                    # per second
                     time.sleep(.17)
                     city_name = str(value);
                     # built url
@@ -75,5 +80,3 @@ with open('locations.csv') as csv_file:
 
                     else:
                         print("City not found..")
-
-    # location, temperature, wind speed, description
