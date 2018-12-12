@@ -8,11 +8,11 @@ After downloading or forking this project, you can run the program by using the 
 
 ### Prerequisites
 
-Make sure to have Python 3.x installed before running the source files as well as an empty .csv file for the output.
+Make sure to have Python 3.x installed before running the source files, either free or paid for API key from Open Weather Map. The program will automatically create an 'output.csv' file in the source directory after the program is run.
 
 
 ## Built With
 
 * [Python](https://docs.python.org/3.6/) - The programming language used
-* [OpenWeatherAPI](https://openweathermap.org/current) - API
+* [Open Weather Map API](https://openweathermap.org/current) - API
 
