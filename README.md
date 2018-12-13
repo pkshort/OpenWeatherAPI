@@ -1,5 +1,7 @@
 # OpenWeatherAPI
 
+This application takes in a CSV file and retrieves information from the Open Weather Map API based on the cities given in the CSV and outputs a CSV file with the weather of those particular cities as well as displaying the results on the local host address: 'http://127.0.0.1:5000/'.
+
 
 
 ## Getting Started
