@@ -1,0 +1,24 @@
+Weather Data
+
+Client: Horizon Media
+
+Language: Python
+
+Goals: Get weather data for list of locations in the United States.
+
+Input:
+	CSV containing:
+	- Location
+
+Output:
+	CSV containing:
+	- Location
+	- Temperature
+	- Wind Speed
+	- Weather Description
+
+Future Considerations:
+
+1. What features should be implemented in future versions?
+2. What are potential optimization opportunities?
+3. What could break this current version?
