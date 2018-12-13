@@ -1,82 +1,95 @@
 # Created by P. Kevin Short II
 
-#
-# load in csv file
-# call weather API for locations
-# output csv: location, temperature, wind speed, weather description
-#
+import csv
+import logging
+import requests
+import tablib
+import time
 
-import csv, requests, pprint, json, time
+class WeatherData:
+    """
+        load in csv file
+        call weather API for locations
+        output csv: location, temperature, wind speed, weather description
+    """
 
-with open('locations.csv') as csv_file:
-    csv_reader = csv.DictReader(csv_file, delimiter=',')
+    def __init__(self, config):
+        self.config = config
+        logging.debug("Initialize class")
 
-    # api request
-    # enter your API key in the variable api_key
-    api_key = ""
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
+    def get_api_data(self):
+        with open(self.config['csv_file']) as csv_file:
+            csv_data = csv.DictReader(csv_file, delimiter=',')
+            api_key = self.config['api_key']
+            base_url = "http://api.openweathermap.org/data/2.5/weather?appid={}&q={}&units={}"
 
-    # imperial units switches the temperature from Kelvin to Farenheit
-    units = "imperial"
+            # imperial units switches the temperature from Kelvin to Farenheit
+            units = self.config['units']
 
-    # setting up output header
-    loc_str = "Location"
-    temp_str = "Current Temperature"
-    wind_str = "Wind Speed"
-    desc_str = "Description"
+            # built output header
+            output_header = [
+                    "Location",
+                    "Current Temperature",
+                    "Wind Speed",
+                    "Description"
+                    ]
 
-    # built output header
-    output_header = [loc_str, temp_str, wind_str, desc_str]
+            # output file - output.csv
+            output_csv = self.config['output_file']
 
-    # output file - output.csv
-    output_csv = "output.csv"
+            logging.debug("Output header {}".format(output_header))
 
-    # opening output file
-    with open(output_csv, mode = "w") as output_file:
-        output_writer = csv.writer(output_file, delimiter=',')
-        output_writer.writerow(output_header)
+            # opening output file
+            with open(output_csv, mode = "w") as output_file:
+                output_writer = csv.writer(output_file, delimiter=',')
+                output_writer.writerow(output_header)
+                # looping through input file
+                # DictReader is a dictionary within a dictionary, therefore
+                # a nested loop is necessary
+                for row in csv_data:
+                    for key, value in row.items():
+                        # API is throttled to 60 times per second
+                        # sleep ensures that the API is called under 60/sec
+                        time.sleep(float(self.config['api_throttle']))
+                        city_name = str(value)
+                        # Call the API using the fully formatted URL
+                        try:
+                            my_json = requests.get(base_url.format(api_key, city_name, units)).json()
+                        except:  #pylint: broad except to capture API throttling
+                            logging.error("API Call failed: {}".format(base_url.format(api_key, city_name, units )))
+                            continue
 
-        # looping through input file
-        # DictReader is a dictionary within a dictionary, therefore
-        # a nested loop is necessary
-        for row in csv_reader:
-            for key, value in row.items():
+                        # if statement to make sure the API call was successfull
+                        if my_json["cod"] == 200:
 
-                    # can call API 60 times per second
-                    # sleep ensures that the API is called under 60 times
-                    # per second
-                    time.sleep(.17)
-                    city_name = str(value);
-                    # built url
-                    complete_url = (base_url + "appid=" + api_key +
-                            "&q=" + city_name +
-                            "&units=" + units)
+                            # retrieving the data from the json response
+                            rec = my_json["main"]
+                            current_temp = rec["temp"]
+                            wind = my_json["wind"]
+                            wind_speed = wind.get("speed")
+                            weather = my_json["weather"]
+                            weather_desc = weather[0]["description"]
 
-                    response = requests.get(complete_url)
-                    my_json = response.json()
+                            # output_writer writes to csv file
+                            output_writer.writerow([str(city_name),
+                                                    str(current_temp),
+                                                    str(wind_speed),
+                                                    str(weather_desc)])
 
-                    # if statement to make sure the API call was successfull
-                    if my_json["cod"] != "404":
+                            logging.debug("{},{},{},{}".format(str(city_name),
+                                                               str(current_temp),
+                                                               str(wind_speed),
+                                                               str(weather_desc)))
+                        else:
+                            logging.debug("API Call returned {}".format(my_json["cod"]))
+                            logging.error("Error getting data for city {}".format(city_name))
+            return
 
-                        # retrieving the data from the json response
-                        rec = my_json["main"]
-                        current_temp = rec["temp"]
-                        wind = my_json["wind"]
-                        wind_speed = wind.get("speed")
-                        weather = my_json["weather"]
-                        weather_desc = weather[0]["description"]
-
-                        # output_writer writes to csv file
-                        output_writer.writerow([str(city_name),
-                                str(current_temp), str(wind_speed),
-                                str(weather_desc)])
-
-                        # prints the output to the console after writing
-                        print("\nCity: " + str(city_name) +
-                                "\n\tTemperature: " + str(current_temp) +
-                                "\n\tWind Speed: " + str(wind_speed) +
-                                "\n\tWeather Description: " + str(weather_desc))
-
-
-                    else:
-                        print("City not found..")
+    def display_data(self):
+        """
+        Use tablib to format the csv data quickly
+        """
+        dataset = tablib.Dataset()
+        with open(self.config['output_file']) as f:
+            dataset.csv = f.read()
+        return dataset.html
