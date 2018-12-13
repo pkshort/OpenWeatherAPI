@@ -77,9 +77,9 @@ class WeatherData:
                                                     str(weather_desc)])
 
                             #logging.debug("{},{},{},{}".format(str(city_name),
-                                                               str(current_temp),
-                                                               str(wind_speed),
-                                                               str(weather_desc)))
+                                                               #str(current_temp),
+                                                               #str(wind_speed),
+                                                               #str(weather_desc)))
                         else:
                             logging.debug("API Call returned {}".format(my_json["cod"]))
                             logging.error("Error getting data for city {}".format(city_name))
