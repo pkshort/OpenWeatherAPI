@@ -16,3 +16,8 @@ Make sure to have Python 3.x installed before running the source files, either f
 * [Python](https://docs.python.org/3.6/) - Programming Language
 * [Open Weather Map API](https://openweathermap.org/current) - API
 * [Flask](http://flask.pocoo.org/docs/1.0/) - Micro web framework
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 40f84dba5af66e9f3282203e63c900c3e906b37c
