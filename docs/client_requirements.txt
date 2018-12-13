@@ -20,5 +20,17 @@ Output:
 Future Considerations:
 
 1. What features should be implemented in future versions?
+	- User Interface
+		- Selecting what the API call returns (wind direction, chance of rain, etc.)
+		- Uploading their own CSV file via an upload button
+		- User deciding the input columns (coordinates, city ID, zip code)
+		
 2. What are potential optimization opportunities?
+	- Upgrading the tier of API, having more than 60 calls per second
+	- Using AJAX to create a dynamic page when loading the data
+		- Right now the page only loads once all of the data is processed
+		- This would print the data line by line as it got recieved rather than all at once at the end
+		
 3. What could break this current version?
+	- Sending above 60 requests per second, the API will throttle the program
+	- If the list got larger the page may time out at a certain point, currently the flask backend can handle the amount 		of entries but would need to be modified if there were 500+ entries
