@@ -15,7 +15,7 @@ class WeatherData:
 
     def __init__(self, config):
         self.config = config
-        logging.debug("Initialize class")
+        #logging.debug("Initialize class")
 
     def get_api_data(self):
         with open(self.config['csv_file']) as csv_file:
@@ -37,7 +37,7 @@ class WeatherData:
             # output file - output.csv
             output_csv = self.config['output_file']
 
-            logging.debug("Output header {}".format(output_header))
+            #logging.debug("Output header {}".format(output_header))
 
             # opening output file
             with open(output_csv, mode = "w") as output_file:
@@ -76,7 +76,7 @@ class WeatherData:
                                                     str(wind_speed),
                                                     str(weather_desc)])
 
-                            logging.debug("{},{},{},{}".format(str(city_name),
+                            #logging.debug("{},{},{},{}".format(str(city_name),
                                                                str(current_temp),
                                                                str(wind_speed),
                                                                str(weather_desc)))
