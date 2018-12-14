@@ -63,4 +63,4 @@ if __name__ == '__main__':
     # Install Control+C signal handler
     signal.signal(signal.SIGINT, lambda *_: sys.exit(0))
     # Startup flask app
-    APP.run(host='0.0.0.0', port=9102, debug=True)
+    APP.run(host='0.0.0.0', port=5000, debug=True)
