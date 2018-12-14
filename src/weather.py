@@ -41,7 +41,7 @@ class WeatherData:
 
             # opening output file
             with open(output_csv, mode = "w") as output_file:
-                output_writer = csv.writer(output_file, delimiter=',')
+                output_writer = csv.writer(output_file, delimiter=',', lineterminator='\n')
                 output_writer.writerow(output_header)
                 # looping through input file
                 # DictReader is a dictionary within a dictionary, therefore
@@ -81,8 +81,12 @@ class WeatherData:
                                                                #str(wind_speed),
                                                                #str(weather_desc)))
                         else:
-                            logging.debug("API Call returned {}".format(my_json["cod"]))
+                            #logging.debug("API Call returned {}".format(my_json["cod"]))
                             logging.error("Error getting data for city {}".format(city_name))
+                            output_writer.writerow(["<font color=red>{}".format(city_name),
+                                                    str("<font color=red>{}".format(0.0)),
+                                                    str("<font color=red>{}".format(0.0)),
+                                                    str("<font color=red> Error City not found</font>")])
             return
 
     def display_data(self):
